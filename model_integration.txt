@@ -1,0 +1,8 @@
+Idea Analyzer       → qwen3:8b
+Market Killer       → Gemini 2.5 Flash
+Competition Killer  → Groq
+Finance Killer      → Gemini 2.5 Flash
+Technical Killer    → Groq
+Legal Killer        → DeepSeek R1 8b
+Defense Agent       → DeepSeek R1 8b
+Scoring Agent       → qwen3:8b
