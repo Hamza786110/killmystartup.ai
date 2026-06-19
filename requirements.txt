@@ -6,3 +6,4 @@ langchain-groq
 langchain-google-genai
 python-dotenv
 langchain-ollama
+tavily

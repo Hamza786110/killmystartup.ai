@@ -742,6 +742,7 @@ dependencies = [
     { name = "langgraph" },
     { name = "python-dotenv" },
     { name = "streamlit" },
+    { name = "tavily" },
 ]
 
 [package.metadata]
@@ -754,6 +755,7 @@ requires-dist = [
     { name = "langgraph", specifier = ">=1.2.5" },
     { name = "python-dotenv", specifier = ">=1.2.2" },
     { name = "streamlit", specifier = ">=1.58.0" },
+    { name = "tavily", specifier = ">=1.1.0" },
 ]
 
 [[package]]
@@ -1923,6 +1925,16 @@ sdist = { url = "https://files.pythonhosted.org/packages/91/74/20dac6d6200d6ec0e
 wheels = [
     { url = "https://files.pythonhosted.org/packages/df/84/14c36a92fb24f8e1cea452f53b0744b5da69d52cdd2fe22e71e6fbf765d5/streamlit-1.58.0-py3-none-any.whl", hash = "sha256:4ca8a7afc5bd16a5f176ccf4be1e34e8121cad0240becd127fb58a103ea3178d", size = 9219185, upload-time = "2026-05-28T18:02:41.993Z" },
 ]
+
+[[package]]
+name = "tavily"
+version = "1.1.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "aiohttp" },
+    { name = "requests" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/63/ba/cd74acdb0537a02fb5657afbd5fd5a27a298c85fc27f544912cc001377bb/tavily-1.1.0.tar.gz", hash = "sha256:7730bf10c925dc0d0d84f27a8979de842ecf88c2882183409addd855e27d8fab", size = 5081, upload-time = "2025-10-31T09:32:40.555Z" }
 
 [[package]]
 name = "tenacity"
