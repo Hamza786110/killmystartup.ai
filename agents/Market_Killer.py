@@ -76,7 +76,7 @@ query=create_market_query(idea_output)
 print(len(query))
 if len(query)<=400:
     research=search.invoke(query)
-    response2 = agent.invoke({
+    market_output = agent.invoke({
         "messages": [
             {
                 "role": "user",
@@ -95,4 +95,4 @@ if len(query)<=400:
         ]
     })
 
-print(response2['messages'][-1].content)
+print(market_output['messages'][-1].content)
