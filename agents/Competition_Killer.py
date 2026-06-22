@@ -7,6 +7,7 @@ from langchain.tools import tool
 from tavily import TavilyClient
 
 model=ChatOllama(model="deepseek-r1:1.5b")
+model2=ChatOllama(model="qwen3:4b")
 @tool
 def search(query:str)->str:
     """Search the web and return market research findings."""
@@ -65,18 +66,28 @@ agent=create_agent(
     5. ...
     """)
 
-
+agent2=create_agent(
+    model=model2,
+    system_prompt="You are a startup analyst. Your task is to summarize the startup profile and market research findings in under 250 words each."
+)
 market_report=market_output['messages'][-1].content
 
-market_summary = agent.invoke({
-    "messages": [{
-        "role":"user",
-        "content": f"""
-Summarize this report in under 300 words:
+idea_summary = agent2.invoke(
+    {
+        "messages":[
+            {
+                "role":"user",
+                "content":f"""
+            {idea_output}"""
+            }]
+})
 
-{market_report}
-"""
-    }]
+market_summary = agent2.invoke({
+    "messages": [
+        {
+        "role":"user",
+        "content": f""" {market_report}"""
+        }]
 })
 
 if len(query)<=6000:
@@ -87,10 +98,10 @@ if len(query)<=6000:
                 "role": "user",
                 "content": f"""
                 Startup Profile:
-                {idea_output}
+                {idea_summary}
 
-                Market Report:
-                {market_report}
+                Market Summary:
+                {market_summary}
 
                  Competition Findings:
                 {research}
