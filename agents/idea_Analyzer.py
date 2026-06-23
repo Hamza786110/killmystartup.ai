@@ -1,9 +1,16 @@
 from langchain_ollama import ChatOllama
 from startup_state import StartupProfile
-llm=ChatOllama(model="qwen3:4b")
 
-model_with_profile=llm.with_structured_output(StartupProfile)
-idea_output=model_with_profile.invoke(
-    "Analyze the below startup idea - AI startup that created personalized chatbots for companies "
-)
-print(idea_output)
+llm = ChatOllama(model="qwen3:4b")
+
+def analyze_idea(startup_idea: str):
+    idea = llm.with_structured_output(StartupProfile)
+    return idea.invoke(
+        f"Analyze the below startup idea : {startup_idea}"
+    )
+
+if __name__ == "__main__":
+    result1 = analyze_idea(
+        "AI startup that created personalized chatbots for companies"
+    )
+    print(result1)
