@@ -152,5 +152,6 @@ if __name__ == "__main__":
         idea_output,
         market_output
     )
+    
     print("\n===== COMPETITION REPORT =====\n")
     print(competition_output["messages"][-1].content)
