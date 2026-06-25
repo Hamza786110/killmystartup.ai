@@ -3,8 +3,8 @@ from langchain_ollama import ChatOllama
 from langchain.agents import create_agent
 from langchain.tools import tool
 from tavily import TavilyClient
-from idea_Analyzer import analyze_idea
-from Market_Killer import analyze_market
+from idea_Analyzer import analyze_idea,result1
+from Market_Killer import analyze_market,result2
 
 
 competition_model = ChatOllama(model="deepseek-r1:1.5b")
@@ -144,9 +144,7 @@ def analyze_competition(idea_output, market_output):
     return competition_output
 if __name__ == "__main__":
 
-    idea_output = analyze_idea(
-        "AI startup that created personalized chatbots for companies"
-    )
+    idea_output = result1
     market_output = analyze_market(idea_output)
     competition_output = analyze_competition(
         idea_output,
