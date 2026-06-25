@@ -6,7 +6,7 @@ from tavily import TavilyClient
 from cli_utils import get_startup_idea
 from idea_Analyzer import analyze_idea
 from Market_Killer import analyze_market
-
+import streamlit as st
 
 competition_model = ChatOllama(model="deepseek-r1:1.5b")
 summary_model = ChatOllama(model="qwen3:4b")
@@ -92,9 +92,7 @@ def create_competition_query(profile):
 
 def analyze_competition(idea_output, market_output):
     query = create_competition_query(idea_output)
-    print("Running competition research...")
     research = search.invoke(query)
-    print("Competition research completed.")
     idea_summary = summary_agent.invoke({
         "messages": [
             {
@@ -149,4 +147,4 @@ if __name__ == "__main__":
     idea_output = analyze_idea(startup_idea)
     market_output = analyze_market(idea_output)
     competition_output = analyze_competition(idea_output, market_output)
-    print(competition_output["messages"][-1].content)
+    st.write(competition_output["messages"][-1].content)

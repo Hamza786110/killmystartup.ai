@@ -4,6 +4,9 @@ from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain.tools import tool
 from langchain.agents import create_agent
 from tavily import TavilyClient
+from cli_utils import get_startup_idea
+from idea_Analyzer import analyze_idea
+import streamlit as st
 load_dotenv()
 
 api_key = os.getenv("GOOGLE_API_KEY")
@@ -80,10 +83,7 @@ def analyze_market(idea_output):
 
 
 if __name__ == "__main__":
-    from cli_utils import get_startup_idea
-    from idea_Analyzer import analyze_idea
- 
     startup_idea = get_startup_idea()
     idea_output = analyze_idea(startup_idea)
     result = analyze_market(idea_output)
-    print(result["messages"][-1].content)
+    st.write(result["messages"][-1].content)
