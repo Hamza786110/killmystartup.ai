@@ -7,8 +7,7 @@ from Scoring_Agent import score_startup
 
 def get_startup_idea() -> str:
     """
-    Get the idea from the command line if provided (e.g.
-    `python main.py "AI chatbot platform for ecommerce stores"`),
+    Get the idea from the command line if provided
     otherwise prompt for it interactively.
     """
     if len(sys.argv) > 1:
