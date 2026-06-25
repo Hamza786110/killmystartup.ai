@@ -19,7 +19,7 @@ model = ChatGoogleGenerativeAI(model="gemini-2.5-flash")
 @tool
 def search(query: str) -> str:
     """Search the web and return market research findings."""
-
+    
     tavily_key = os.getenv("TAVILY_API_KEY")
 
     client = TavilyClient(tavily_key)
@@ -45,13 +45,14 @@ agent = create_agent(
 
 
 def create_market_query(profile):
-    return (
-        f"{profile['Industry']} "
-        f"{profile['Description']} for "
-        f"{profile['Target_Customer']}. "
-        "Research competitors, market size, growth trends, "
-        "barriers to entry and customer adoption."
+    industry = profile['Industry'][:50]
+    description = profile['Description'][:100]
+    customer = profile['Target_Customer'][:50]
+    query = (
+        f"{industry} {description} for {customer}. "
+        "Research competitors, market size, growth trends, barriers to entry."
     )
+    return query[:400]
 
 
 def analyze_market(idea_output):
@@ -86,4 +87,4 @@ if __name__ == "__main__":
     startup_idea = get_startup_idea()
     idea_output = analyze_idea(startup_idea)
     result = analyze_market(idea_output)
-    st.write(result["messages"][-1].content)
+    st.markdown(result["messages"][-1].content)

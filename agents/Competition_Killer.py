@@ -81,14 +81,13 @@ summary_agent = create_agent(
     """
 )
 def create_competition_query(profile):
-
-    return (
-        f"Given the startup profile: {profile['Industry']}, "
-        f"serving {profile['Target_Customer']}, "
-        "identify the top competitors in the market. "
-        "Provide competitors, market position, differentiators, "
-        "funding, partnerships, and competitive advantages."
+    industry = profile['Industry'][:80]
+    customer = profile['Target_Customer'][:80]
+    query = (
+        f"Top competitors in {industry} serving {customer}. "
+        "Market position, differentiators, funding, competitive advantages."
     )
+    return query[:400]
 
 def analyze_competition(idea_output, market_output):
     query = create_competition_query(idea_output)

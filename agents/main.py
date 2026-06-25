@@ -55,7 +55,7 @@ if st.session_state.results:
 
     st.divider()
     st.header("📈 Market Analysis")
-    st.write(results["market_output"]["messages"][-1].content)
+    st.markdown(results["market_output"]["messages"][-1].content)
 
     st.divider()
     st.header("⚔️ Competition Analysis")
@@ -63,4 +63,4 @@ if st.session_state.results:
 
     st.divider()
     st.header("🏁 Final Verdict")
-    st.write(results["final_report"])
+    st.write(results)
