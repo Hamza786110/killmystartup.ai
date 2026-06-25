@@ -1,68 +1,66 @@
-import sys
 from idea_Analyzer import analyze_idea
 from Market_Killer import analyze_market
 from Competition_Killer import analyze_competition
 from Scoring_Agent import score_startup
 import streamlit as st
 
-def get_startup_idea() -> str:
-    st.text("Describe your startup idea:")
-    idea = st.text_input("> ").strip()
-    while not idea:
-        st.write("Please enter a non-empty idea.")
-        idea = st.text_input("> ").strip()
-    return idea
+# ── session-state bootstrap ──────────────────────────────────────────────────
+if "results" not in st.session_state:
+    st.session_state.results = None
 
+# ── page layout ──────────────────────────────────────────────────────────────
+st.title("🚀 Startup Killer")
+st.write("Enter your startup idea below and let the pipeline tear it apart.")
 
-def run_pipeline(startup_idea: str) -> dict:
-    """Run all four steps and return every stage's output (not just the final report)."""
-    st.write("\nStep 1/4: Analyzing idea...")
-    idea_output = analyze_idea(startup_idea)
+startup_idea = st.text_input("Describe your startup idea:", placeholder="e.g. An AI tool that …")
 
-    st.write("Step 2/4: Analyzing market...")
-    market_output = analyze_market(idea_output)
+if st.button("Analyse"):
+    if not startup_idea.strip():
+        # BUG FIX 1 – no while-loop; use st.warning() for empty input instead
+        st.warning("Please enter a non-empty idea.")
+    else:
+        with st.spinner("Running pipeline…"):
+            st.write("Step 1/4: Analysing idea…")
+            idea_output = analyze_idea(startup_idea)
 
-    st.write("Step 3/4: Analyzing competition...")
-    competition_output = analyze_competition(idea_output, market_output)
+            st.write("Step 2/4: Analysing market…")
+            market_output = analyze_market(idea_output)
 
-    st.write("Step 4/4: Scoring startup...")
-    final_report = score_startup(idea_output, market_output, competition_output)
+            st.write("Step 3/4: Analysing competition…")
+            competition_output = analyze_competition(idea_output, market_output)
 
-    return {
-        "idea_output": idea_output,
-        "market_output": market_output,
-        "competition_output": competition_output,
-        "final_report": final_report,
-    }
+            st.write("Step 4/4: Scoring startup…")
+            final_report = score_startup(idea_output, market_output, competition_output)
 
+        # BUG FIX 2 – was `if st.success(...): st.write(results)`
+        #   st.success() returns None, so the if-block never ran and results were never shown.
+        #   Call print_results() directly after a successful run.
+        st.session_state.results = {
+            "idea_output": idea_output,
+            "market_output": market_output,
+            "competition_output": competition_output,
+            "final_report": final_report,
+        }
 
-def print_results(results: dict) -> None:
-    """Print every stage of the pipeline, in order."""
-    st.write("\n" + "=" * 70)
-    st.write("STARTUP PROFILE")
-    st.write("=" * 70)
+# ── render results ────────────────────────────────────────────────────────────
+if st.session_state.results:
+    results = st.session_state.results
+
+    st.success("Pipeline complete!")
+
+    st.divider()
+    st.header("📋 Startup Profile")
     for key, value in results["idea_output"].items():
-        st.write(f"{key}: {value}")
+        st.write(f"**{key}:** {value}")
 
-    st.write("\n" + "=" * 70)
-    st.write("MARKET ANALYSIS")
-    st.write("=" * 70)
+    st.divider()
+    st.header("📈 Market Analysis")
     st.write(results["market_output"]["messages"][-1].content)
 
-    st.write("\n" + "=" * 70)
-    st.write("COMPETITION ANALYSIS")
-    st.write("=" * 70)
+    st.divider()
+    st.header("⚔️ Competition Analysis")
     st.write(results["competition_output"]["messages"][-1].content)
 
-    st.write("\n" + "=" * 70)
-    st.write("FINAL VERDICT")
-    st.write("=" * 70)
+    st.divider()
+    st.header("🏁 Final Verdict")
     st.write(results["final_report"])
-
-
-if __name__ == "__main__":
-    startup_idea = get_startup_idea()
-
-    results = run_pipeline(startup_idea)
-    if st.success(...):
-        st.write(results)

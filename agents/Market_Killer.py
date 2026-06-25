@@ -47,7 +47,7 @@ agent = create_agent(
 def create_market_query(profile):
     return (
         f"{profile['Industry']} "
-        f"AI chatbot personalization platform for "
+        f"{profile['Description']} for "
         f"{profile['Target_Customer']}. "
         "Research competitors, market size, growth trends, "
         "barriers to entry and customer adoption."
