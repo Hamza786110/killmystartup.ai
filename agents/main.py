@@ -4,11 +4,10 @@ from Competition_Killer import analyze_competition
 from Scoring_Agent import score_startup
 import streamlit as st
 
-# ── session-state bootstrap ──────────────────────────────────────────────────
+
 if "results" not in st.session_state:
     st.session_state.results = None
 
-# ── page layout ──────────────────────────────────────────────────────────────
 st.title("🚀 Startup Killer")
 st.write("Enter your startup idea below and let the pipeline tear it apart.")
 
@@ -16,7 +15,7 @@ startup_idea = st.text_input("Describe your startup idea:", placeholder="e.g. An
 
 if st.button("Analyse"):
     if not startup_idea.strip():
-        # BUG FIX 1 – no while-loop; use st.warning() for empty input instead
+
         st.warning("Please enter a non-empty idea.")
     else:
         with st.spinner("Running pipeline…"):
@@ -32,9 +31,6 @@ if st.button("Analyse"):
             st.write("Step 4/4: Scoring startup…")
             final_report = score_startup(idea_output, market_output, competition_output)
 
-        # BUG FIX 2 – was `if st.success(...): st.write(results)`
-        #   st.success() returns None, so the if-block never ran and results were never shown.
-        #   Call print_results() directly after a successful run.
         st.session_state.results = {
             "idea_output": idea_output,
             "market_output": market_output,
