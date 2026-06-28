@@ -7,3 +7,4 @@ langchain-google-genai
 python-dotenv
 langchain-ollama
 tavily
+fastapi
