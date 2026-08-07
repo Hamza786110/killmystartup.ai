@@ -4,7 +4,7 @@ from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain.tools import tool
 from langchain.agents import create_agent
 from tavily import TavilyClient
-from cli_utils import get_startup_idea
+from agents.pipeline import get_startup_idea
 from idea_Analyzer import analyze_idea
 import streamlit as st
 load_dotenv()
@@ -33,21 +33,10 @@ def search(query: str) -> str:
     return response.get("answer", "No answer found")
 
 
-agent = create_agent(
-    model=model,
-    tools=[search],
-    system_prompt="""
-    You are Market Killer, a ruthless startup analyst.
-
-    Your mission is to disprove startup ideas using market evidence.
-    """
-)
-
-
-def create_market_query(profile):
-    industry = profile['Industry'][:50]
-    description = profile['Description'][:100]
-    customer = profile['Target_Customer'][:50]
+def _create_market_query(profile: StartupProfile) -> str:
+    industry = profile.industry[:50]
+    description = profile.description[:100]
+    customer = profile.target_customer[:50]
     query = (
         f"{industry} {description} for {customer}. "
         "Research competitors, market size, growth trends, barriers to entry."
@@ -55,36 +44,25 @@ def create_market_query(profile):
     return query[:400]
 
 
-def analyze_market(idea_output):
+def analyze_market(idea_output: StartupProfile) -> MarketAnalysis:
+    """Run one research call and one structured LLM call to produce a MarketAnalysis."""
+    query = _create_market_query(idea_output)
+    research = _search(query)
 
-    query = create_market_query(idea_output)
+    structured_llm = model.with_structured_output(MarketAnalysis)
+    result = structured_llm.invoke(
+        f"""
+        You are Market Killer, a ruthless startup analyst. Disprove startup
+        ideas using market evidence.
 
-    research = search.invoke(query)
+        Startup Profile:
+        {idea_output.model_dump_json(indent=2)}
 
-    market_output = agent.invoke({
-        "messages": [
-            {
-                "role": "user",
-                "content": f"""
-                Startup Profile:
-                {idea_output}
+        Market Research:
+        {research}
 
-                Market Research:
-                {research}
-
-                Based on this research,
-                identify market risks and ask
-                challenging questions.
-                """
-            }
-        ]
-    })
-
-    return market_output
-
-
-if __name__ == "__main__":
-    startup_idea = get_startup_idea()
-    idea_output = analyze_idea(startup_idea)
-    result = analyze_market(idea_output)
-    st.markdown(result["messages"][-1].content)
+        Based on this research, score the market viability, identify market
+        risks, and ask challenging questions for the founder.
+        """
+    )
+    return result  # type: ignore[return-value]

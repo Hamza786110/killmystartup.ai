@@ -2,7 +2,7 @@ from dotenv import load_dotenv
 from langchain_groq import ChatGroq
 from langchain_ollama import ChatOllama
 from langchain.agents import create_agent
-from cli_utils import get_startup_idea
+from agents.pipeline import get_startup_idea
 from idea_Analyzer import analyze_idea
 from Market_Killer import analyze_market
 from Competition_Killer import analyze_competition
@@ -47,7 +47,7 @@ QUESTIONS FOR THE FOUNDER:
 )
 
 
-def score_startup(idea_output: StartupProfile, market_output: dict, competition_output: dict) -> str:
+def score_startup(idea_output: StartupProfile, market_output: MarketAnalysis, competition_output: CompetitionAnalysis) -> str:
     """Produce the final score, reasoning, and founder questions."""
     competition_summary = summary_model.invoke(
         f"""
@@ -63,14 +63,14 @@ Summarize the following competition report in under 250 words:
             {
                 "role": "user",
                 "content": f"""
-Startup Profile:
-{idea_output}
+        Startup Profile:
+        {idea_output.model_dump_json(indent=2)}
 
-Market Analysis:
-{market_output['messages'][-1].content}
+        Market Analysis:
+        {market_output.model_dump_json(indent=2)}
 
-Competition Analysis:
-{competition_summary_text}
+        Competition Analysis:
+        {competition_output.model_dump_json(indent=2)}
 
 Provide:
 1. Final Startup Score

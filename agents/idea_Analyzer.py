@@ -12,10 +12,3 @@ def analyze_idea(startup_idea: str) -> StartupProfile:
         f"Analyze the following startup idea and extract a structured profile:\n\n{startup_idea}"
     )
     return cast(StartupProfile, result)
-
-if __name__ == "__main__":
-    from cli_utils import get_startup_idea
- 
-    startup_idea = get_startup_idea()
-    result = analyze_idea(startup_idea)
-    st.write(result)
