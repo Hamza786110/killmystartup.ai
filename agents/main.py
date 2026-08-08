@@ -1,4 +1,4 @@
-from idea_Analyzer import analyze_idea
+from Idea_Analyzer import analyze_idea
 from Market_Killer import analyze_market
 from Competition_Killer import analyze_competition
 from Scoring_Agent import score_startup
@@ -11,7 +11,7 @@ if "results" not in st.session_state:
 st.title("🚀 Startup Killer")
 st.write("Enter your startup idea below and let the pipeline tear it apart.")
 
-startup_idea = st.text_input("Describe your startup idea:", placeholder="e.g. An AI tool that …")
+startup_idea = st.text_input("Describe your startup idea:", placeholder="e.g An AI system for…")
 
 if st.button("Analyse"):
     if not startup_idea.strip():
@@ -46,16 +46,18 @@ if st.session_state.results:
 
     st.divider()
     st.header("📋 Startup Profile")
-    for key, value in results["idea_output"].items():
+    for key, value in results["idea_output"].model_dump().items():
         st.write(f"**{key}:** {value}")
 
     st.divider()
     st.header("📈 Market Analysis")
-    st.markdown(results["market_output"]["messages"][-1].content)
+    for key, value in results["market_output"].model_dump().items():
+        st.write(f"**{key}:** {value}")
 
     st.divider()
     st.header("⚔️ Competition Analysis")
-    st.write(results["competition_output"]["messages"][-1].content)
+    for key, value in results["competition_output"].model_dump().items():
+        st.write(f"**{key}:** {value}")
 
     st.divider()
     st.header("🏁 Final Verdict")

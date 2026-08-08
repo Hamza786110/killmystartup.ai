@@ -1,12 +1,11 @@
 import os
+
 from dotenv import load_dotenv
 from langchain_google_genai import ChatGoogleGenerativeAI
-from langchain.tools import tool
-from langchain.agents import create_agent
 from tavily import TavilyClient
-from agents.pipeline import get_startup_idea
-from idea_Analyzer import analyze_idea
-import streamlit as st
+
+from startup_state import MarketAnalysis, StartupProfile
+
 load_dotenv()
 
 api_key = os.getenv("GOOGLE_API_KEY")
@@ -16,20 +15,15 @@ if api_key:
 model = ChatGoogleGenerativeAI(model="gemini-2.5-flash")
 
 
-@tool
-def search(query: str) -> str:
+def _search(query: str) -> str:
     """Search the web and return market research findings."""
-    
     tavily_key = os.getenv("TAVILY_API_KEY")
-
     client = TavilyClient(tavily_key)
-
     response = client.search(
         query=query,
-        include_answer="basic",#type:ignore
-        search_depth="advanced"
+        include_answer="basic",  # type: ignore
+        search_depth="advanced",
     )
-
     return response.get("answer", "No answer found")
 
 

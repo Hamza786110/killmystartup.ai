@@ -1,8 +1,8 @@
-from agents.Competition_Killer import analyze_competition
-from agents.idea_Analyzer import analyze_idea
-from agents.Market_Killer import analyze_market
-from agents.startup_state import FullReport
-from agents.Scoring_Agent import score_startup
+from Competition_Killer import analyze_competition
+from Idea_Analyzer import analyze_idea
+from Market_Killer import analyze_market
+from Scoring_Agent import score_startup
+from startup_state import FullReport
 
 
 def run_pipeline(startup_idea: str) -> FullReport:

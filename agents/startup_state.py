@@ -1,4 +1,6 @@
-from pydantic import BaseModel,Field
+from pydantic import BaseModel, Field
+
+
 class StartupProfile(BaseModel):
     """Structured extraction of a raw startup idea."""
 
@@ -51,4 +53,9 @@ class FullReport(BaseModel):
     idea: StartupProfile
     market: MarketAnalysis
     competition: CompetitionAnalysis
-    scoring: ScoringResult
+    # score_startup() (Scoring_Agent) currently returns a free-text verdict from
+    # a conversational agent, not a ScoringResult, so this is typed to match
+    # what the function actually produces. If you switch score_startup() to
+    # use with_structured_output(ScoringResult) like the other agents, change
+    # this back to `ScoringResult`.
+    scoring: str

@@ -1,14 +1,13 @@
 import os
+from typing import cast
+
 from langchain_ollama import ChatOllama
-from langchain.agents import create_agent
-from langchain.tools import tool
 from tavily import TavilyClient
-from agents.pipeline import get_startup_idea
-from idea_Analyzer import analyze_idea
-from Market_Killer import analyze_market
-import streamlit as st
+
+from startup_state import CompetitionAnalysis, MarketAnalysis, StartupProfile
 
 competition_model = ChatOllama(model="deepseek-r1:1.5b")
+
 
 def _search(query: str) -> str:
     """Search the web and return competitor research findings."""
@@ -59,4 +58,4 @@ def analyze_competition(
         for the founder.
         """
     )
-    return result 
+    return cast(CompetitionAnalysis, result)
